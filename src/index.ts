@@ -1,2 +1,2 @@
-export { useCrud as default, CrudRecord } from './CrudHook'
+export * from './CrudHook'
 export * from './Provider'

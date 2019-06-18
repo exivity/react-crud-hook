@@ -27,3 +27,24 @@ export function useCrud (record: IRecord): CrudRecord {
     return CrudRecord
   }, [record])
 }
+
+export function useCruds (records: IRecord[]): CrudRecord[] {
+  const [unUsedStateValue, forceRender] = useState({})
+  const crudManager = useContext(CrudContext)
+
+  return useMemo(() => {
+    return records.map((record) => {
+      const CrudRecord = new Record(record, forceRender) as CrudRecord
+
+      CrudRecord.save = function (options?: Options) {
+        return crudManager.save(CrudRecord._record, options)
+      }
+
+      CrudRecord.delete = function (options?: Options) {
+        return crudManager.delete(CrudRecord._record, options)
+      }
+
+      return CrudRecord
+    })
+  }, [records])
+}
