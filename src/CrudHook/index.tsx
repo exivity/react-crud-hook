@@ -12,11 +12,9 @@ export interface CrudRecord extends Record {
 export function useCrud (record: IRecord): CrudRecord {
   const crudManager = useContext(CrudContext)
   const [reference, forceRender] = useState({})
+  const CrudRecord = useMemo(() => new Record(record, forceRender) as CrudRecord, [record])
 
   return useMemo(() => {
-    const CrudRecord = new Record(record, forceRender) as CrudRecord
-    const _record = CrudRecord._record
-
     CrudRecord.save = function (options?: Options) {
       return crudManager.save(CrudRecord._record, options)
     }
