@@ -9,12 +9,6 @@ export interface CrudRecord extends Record {
   delete: (options?: Options) => void
 }
 
-const assign = (ob: any, ...o: any) => {
-  o.forEach((obj: any) =>{if (typeof obj !== 'undefined')
-    Object.defineProperties(ob, Object.getOwnPropertyDescriptors(obj))})
-  return ob
-}
-
 export function useCrud (record: IRecord): CrudRecord {
   const crudManager = useContext(CrudContext)
   const [reference, forceRender] = useState({})
@@ -34,16 +28,16 @@ export function useCrud (record: IRecord): CrudRecord {
     return {
        ...CrudRecord,
       get id () {
-        return this._record.id
+        return CrudRecord._record.id
       },
       get type () {
-        return this._record.type
+        return CrudRecord._record.type
       },
       get attributes () {
-        return this._record.attributes
+        return CrudRecord._record.attributes
       },
       get relationships () {
-        return this._record.relationships
+        return CrudRecord._record.relationships
       }
     }
   }, [reference, record])
