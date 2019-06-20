@@ -41,7 +41,7 @@ export function useCrud (record: IRecord): CrudRecord {
     console.log('effect', stateRecord, stateLis)
     return stateLis((updatedRecord: Record) => {
       console.log('listener', updatedRecord)
-      const [rec, lis] = createRecord(record)
+      const [rec, lis] = createRecord(updatedRecord)
       setRecord(rec)
       setLis(lis)
     })
