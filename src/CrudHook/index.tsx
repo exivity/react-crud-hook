@@ -30,7 +30,21 @@ export function useCrud (record: IRecord): CrudRecord {
       return crudManager.delete(CrudRecord._record, options)
     }
 
-    return assign({}, CrudRecord)
+    return {
+       ...CrudRecord,
+      get id () {
+        return this._record.id
+      },
+      get type () {
+        return this._record.type
+      },
+      get attributes () {
+        return this._record.attributes
+      },
+      get relationships () {
+        return this._record.relationships
+      }
+    }
   }, [reference, record])
 }
 //
