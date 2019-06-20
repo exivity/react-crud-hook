@@ -22,36 +22,42 @@ function usePrevious(value: any) {
 export function useCrud (record: IRecord): CrudRecord {
   const previousRecord = usePrevious(record)
   const crudManager = useContext(CrudContext)
-  const [state, setState] = useState(createRecord(record))
-  const [crudRecord, subscribe] = state
+  const [initialrec, initialLis] = createRecord(record)
+  const [stateRecord, setRecord] = useState(initialrec)
+  const [stateLis, setLis] = useState(initialLis)
+
   console.log('render')
 
   useEffect(() => {
     if (previousRecord && previousRecord !== record) {
-      setState(createRecord(record))
+      const [rec, lis] = createRecord(record)
+      setRecord(rec)
+      setLis(lis)
       console.log('reset')
     }
   }, [record])
 
   useEffect(() => {
-    console.log('effect', crudRecord, subscribe)
-    return subscribe((updatedRecord: Record) => {
+    console.log('effect', stateRecord, stateLis)
+    return stateLis((updatedRecord: Record) => {
       console.log('listener', updatedRecord)
-      setState(createRecord(updatedRecord))
+      const [rec, lis] = createRecord(record)
+      setRecord(rec)
+      setLis(lis)
     })
-  }, [state])
+  }, [stateRecord, setLis])
 
   return useMemo(() => {
-    crudRecord.save = function (options?: Options) {
-      return crudManager.save(crudRecord.record, options)
+    stateRecord.save = function (options?: Options) {
+      return crudManager.save(stateRecord.record, options)
     }
 
-    crudRecord.delete = function (options?: Options) {
-      return crudManager.delete(crudRecord.record, options)
+    stateRecord.delete = function (options?: Options) {
+      return crudManager.delete(stateRecord.record, options)
     }
 
-    console.log('meme', crudRecord)
-    return crudRecord
-  }, [state])
+    console.log('meme', stateRecord)
+    return stateRecord
+  }, [stateRecord])
 }
 
