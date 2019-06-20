@@ -33,7 +33,7 @@ export function useCrud (record: IRecord): CrudRecord {
 
   useEffect(() => subscribe((updatedRecord: Record) => {
     setState(createRecord(updatedRecord))
-  }))
+  }), [state])
 
   return useMemo(() => {
     crudRecord.save = function (options?: Options) {
