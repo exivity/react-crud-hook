@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect, useMemo } from 'react'
+import { useContext, useState, useEffect, useRef, useMemo } from 'react'
 
 import { Record, IRecord, createRecord } from 'resma'
 import { Options } from 'lemon-curd'
@@ -9,13 +9,24 @@ export interface CrudRecord extends Record {
   delete: (options?: Options) => void
 }
 
+function usePrevious(value: any) {
+  const ref = useRef()
+
+  useEffect(() => {
+    ref.current = value
+  }, [value])
+
+  return ref.current
+}
+
 export function useCrud (record: IRecord): CrudRecord {
+  const previousRecord = usePrevious(record)
   const crudManager = useContext(CrudContext)
   const [state, setState] = useState(createRecord(record))
   const [crudRecord, subscribe] = state
 
   useEffect(() => {
-    if (crudRecord.record !== record) {
+    if (previousRecord && previousRecord !== record) {
       setState(createRecord(record))
     }
   }, [record])
