@@ -21,6 +21,7 @@ export function useCrud (record: IRecord): CrudRecord {
 
   return useMemo(() => {
     const CrudRecord = new Record(record, forceRender) as CrudRecord
+    const _record = CrudRecord._record
 
     CrudRecord.save = function (options?: Options) {
       return crudManager.save(CrudRecord._record, options)
