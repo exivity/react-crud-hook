@@ -1,6 +1,6 @@
-import { useContext, useState, useMemo } from 'react'
+import { useContext, useState, useEffect, useMemo } from 'react'
 
-import { Record, IRecord } from 'resma'
+import { Record, IRecord, createRecord } from 'resma'
 import { Options } from 'lemon-curd'
 import { CrudContext } from '../Provider'
 
@@ -10,41 +10,27 @@ export interface CrudRecord extends Record {
 }
 
 export function useCrud (record: IRecord): CrudRecord {
-  const [unUsedStateValue, forceRender] = useState({})
   const crudManager = useContext(CrudContext)
 
-  return useMemo(() => {
-    const CrudRecord = new Record(record, forceRender) as CrudRecord
+  const [state, setState] = useState(createRecord(record))
+  const [crudRecord, subscribe] = state
 
-    CrudRecord.save = function (options?: Options) {
-      return crudManager.save(CrudRecord._record, options)
-    }
+  useEffect(() => setState(createRecord(record)), [record])
 
-    CrudRecord.delete = function (options?: Options) {
-      return crudManager.delete(CrudRecord._record, options)
-    }
-
-    return CrudRecord
-  }, [record])
-}
-
-export function useCruds (records: IRecord[]): CrudRecord[] {
-  const [unUsedStateValue, forceRender] = useState({})
-  const crudManager = useContext(CrudContext)
+  useEffect(() => subscribe((updatedRecord: Record) => {
+    setState(createRecord(updatedRecord))
+  }))
 
   return useMemo(() => {
-    return records.map((record) => {
-      const CrudRecord = new Record(record, forceRender) as CrudRecord
+    crudRecord.save = function (options?: Options) {
+      return crudManager.save(crudRecord.record, options)
+    }
 
-      CrudRecord.save = function (options?: Options) {
-        return crudManager.save(CrudRecord._record, options)
-      }
+    crudRecord.delete = function (options?: Options) {
+      return crudManager.delete(crudRecord.record, options)
+    }
 
-      CrudRecord.delete = function (options?: Options) {
-        return crudManager.delete(CrudRecord._record, options)
-      }
-
-      return CrudRecord
-    })
-  }, [records])
+    return crudRecord
+  }, [crudRecord])
 }
+
