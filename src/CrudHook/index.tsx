@@ -24,16 +24,22 @@ export function useCrud (record: IRecord): CrudRecord {
   const crudManager = useContext(CrudContext)
   const [state, setState] = useState(createRecord(record))
   const [crudRecord, subscribe] = state
+  console.log('render')
 
   useEffect(() => {
     if (previousRecord && previousRecord !== record) {
       setState(createRecord(record))
+      console.log('reset')
     }
   }, [record])
 
-  useEffect(() => subscribe((updatedRecord: Record) => {
-    setState(createRecord(updatedRecord))
-  }), [state])
+  useEffect(() => {
+    console.log('effect', crudRecord, subscribe)
+    return subscribe((updatedRecord: Record) => {
+      console.log('listener', updatedRecord)
+      setState(createRecord(updatedRecord))
+    })
+  }, [state])
 
   return useMemo(() => {
     crudRecord.save = function (options?: Options) {
@@ -44,6 +50,7 @@ export function useCrud (record: IRecord): CrudRecord {
       return crudManager.delete(crudRecord.record, options)
     }
 
+    console.log('meme', crudRecord)
     return crudRecord
   }, [state])
 }
