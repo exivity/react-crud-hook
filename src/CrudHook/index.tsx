@@ -11,15 +11,18 @@ export interface CrudRecord extends Record {
 
 export function useCrud (record: IRecord): CrudRecord {
   const crudManager = useContext(CrudContext)
-
   const [state, setState] = useState(createRecord(record))
   const [crudRecord, subscribe] = state
 
-  useEffect(() => setState(createRecord(record)), [record])
+  useEffect(() => {
+    if (crudRecord.record !== record) {
+      setState(createRecord(record))
+    }
+  }, [record])
 
   useEffect(() => subscribe((updatedRecord: Record) => {
     setState(createRecord(updatedRecord))
-  }))
+  }), [record])
 
   return useMemo(() => {
     crudRecord.save = function (options?: Options) {
