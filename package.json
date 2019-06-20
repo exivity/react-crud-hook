@@ -1,6 +1,6 @@
 {
   "name": "react-crud-hook",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "React crud hook - uses crud global crud manager",
   "main": "dist/index.js",
   "scripts": {

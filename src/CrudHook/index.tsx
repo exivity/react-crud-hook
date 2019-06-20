@@ -31,6 +31,6 @@ export function useCrud (record: IRecord): CrudRecord {
     }
 
     return crudRecord
-  }, [crudRecord])
+  }, [state])
 }
 
