@@ -3,15 +3,17 @@ import { Record, IRecord } from 'resma'
 import { Options } from 'lemon-curd'
 import { CrudContext } from '../Provider'
 
-export interface CrudRecord extends Record {
+type RecordWithState<T> = T & Record
+
+export type CrudRecord<T> = RecordWithState<T> & {
   save: (options?: Options) => void
   delete: (options?: Options) => void
 }
 
-export function useCrud<T> (record: IRecord): T & CrudRecord {
+export function useCrud<T> (record: IRecord): CrudRecord<T> {
   const crudManager = useContext(CrudContext)
   const [reference, forceRender] = useState({})
-  const CrudRecord = useMemo(() => new Record(record, forceRender) as T & CrudRecord, [record])
+  const CrudRecord = useMemo(() => new Record(record, forceRender) as CrudRecord<T>, [record])
 
   return useMemo(() => {
     CrudRecord.save = function (options?: Options) {
