@@ -8,10 +8,10 @@ export interface CrudRecord extends Record {
   delete: (options?: Options) => void
 }
 
-export function useCrud (record: IRecord): CrudRecord {
+export function useCrud<T> (record: IRecord): T & CrudRecord {
   const crudManager = useContext(CrudContext)
   const [reference, forceRender] = useState({})
-  const CrudRecord = useMemo(() => new Record(record, forceRender) as CrudRecord, [record])
+  const CrudRecord = useMemo(() => new Record(record, forceRender) as T & CrudRecord, [record])
 
   return useMemo(() => {
     CrudRecord.save = function (options?: Options) {
