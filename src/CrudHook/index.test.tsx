@@ -195,3 +195,20 @@ test('Calling setters triggers a rerender', async (done) => {
     done()
   })
 })
+
+test('Calling setters updates Record instance reference', async (done) => {
+  const { result, waitForNextUpdate } = renderHook(() => useCrud(fakeRecord), { wrapper: Wrapper })
+  let initialRef: any = null
+
+  setTimeout(() => act(() => {
+    initialRef = result.current
+    result.current.setAttribute('name', 'Michiel de Vos')
+  }), 100)
+
+  // waitForNextUpdate triggers on render
+  waitForNextUpdate().then(() => {
+    expect(initialRef).not.toBe(null)
+    expect(result.current).not.toBe(initialRef)
+    done()
+  })
+})
