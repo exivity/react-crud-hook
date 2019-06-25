@@ -1,4 +1,4 @@
-import { useContext, useState, useMemo } from 'react'
+import { useEffect, useContext, useState, useMemo } from 'react'
 import { Record, IRecord } from 'resma'
 import { Options } from 'lemon-curd'
 import { CrudContext } from '../Provider'
@@ -14,24 +14,20 @@ export function useCrud<T> (record: IRecord): CrudRecord<T> {
   const crudManager = useContext(CrudContext)
   const [reference, forceRender] = useState(record)
 
-  const crudRecord = useMemo(() => {
-    forceRender(record)
-    return new Record(record) as CrudRecord<T>
-  }, [record])
+  useEffect(() => forceRender(record), [record])
 
   return useMemo(() => {
-    crudRecord.save = function (options?: Options) {
-      return crudManager.save(crudRecord._record, options)
+    const crud = new Record(record) as CrudRecord<T>
+    crud.subscribe(forceRender)
+
+    crud.save = function (options?: Options) {
+      return crudManager.save(crud._record, options)
     }
 
-    crudRecord.delete = function (options?: Options) {
-      return crudManager.delete(crudRecord._record, options)
+    crud.delete = function (options?: Options) {
+      return crudManager.delete(crud._record, options)
     }
 
-    const newInstance = Object.create(crudRecord)
-    newInstance._record = { ...reference }
-    newInstance.subscribe(forceRender)
-
-    return newInstance
-  }, [reference, crudRecord])
+    return crud
+  }, [reference])
 }
