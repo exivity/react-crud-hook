@@ -14,11 +14,15 @@ export function useCrud<T> (record: IRecord): CrudRecord<T> {
   const crudManager = useContext(CrudContext)
   const [reference, forceRender] = useState(record)
 
-  useEffect(() => forceRender(record), [record])
+  const crud = useMemo(() => {
+    forceRender(record)
+    return new Record(record) as CrudRecord<T>
+  }, [record])
+
+  useEffect(() => crud.subscribe(forceRender), [record])
 
   return useMemo(() => {
-    const crud = new Record(reference) as CrudRecord<T>
-    crud.subscribe(forceRender)
+    crud._record = reference
 
     crud.save = function (options?: Options) {
       return crudManager.save(crud._record, options)
@@ -29,5 +33,5 @@ export function useCrud<T> (record: IRecord): CrudRecord<T> {
     }
 
     return crud
-  }, [reference])
+  }, [reference, crud])
 }
