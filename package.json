@@ -40,6 +40,6 @@
   },
   "dependencies": {
     "lemon-curd": "^0.0.5",
-    "resma": "^0.0.15"
+    "resma": "^0.0.16"
   }
 }
