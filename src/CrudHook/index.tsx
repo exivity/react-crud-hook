@@ -29,7 +29,7 @@ export function useCrud<T> (record: IRecord): CrudRecord<T> {
     }
 
     const newInstance = Object.create(crudRecord)
-    newInstance._record = reference
+    newInstance._record = { ...reference }
 
     return newInstance
   }, [reference, crudRecord])
