@@ -16,7 +16,7 @@ export function useCrud<T> (record: IRecord): CrudRecord<T> {
 
   const crudRecord = useMemo(() => {
     forceRender(record)
-    return new Record(record, forceRender) as CrudRecord<T>
+    return new Record(record) as CrudRecord<T>
   }, [record])
 
   return useMemo(() => {
@@ -30,6 +30,7 @@ export function useCrud<T> (record: IRecord): CrudRecord<T> {
 
     const newInstance = Object.create(crudRecord)
     newInstance._record = { ...reference }
+    newInstance.subscribe(forceRender)
 
     return newInstance
   }, [reference, crudRecord])
