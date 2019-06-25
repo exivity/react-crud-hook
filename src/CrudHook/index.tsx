@@ -17,7 +17,7 @@ export function useCrud<T> (record: IRecord): CrudRecord<T> {
   useEffect(() => forceRender(record), [record])
 
   return useMemo(() => {
-    const crud = new Record(record) as CrudRecord<T>
+    const crud = new Record(reference) as CrudRecord<T>
     crud.subscribe(forceRender)
 
     crud.save = function (options?: Options) {
