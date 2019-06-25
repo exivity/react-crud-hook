@@ -27,7 +27,9 @@ export function useCrud<T> (record: IRecord): CrudRecord<T> {
     const state: any = { ...CrudRecord }
     const transferState = Object.keys(state).reduce((newState, key) => {
       newState[key] = {
-        value: state[key]
+        value: typeof state[key] === 'function'
+          ? function (this: typeof newState, ...args: any) { return state[key].call(this, ...args) }
+          : state[key]
       }
 
       return newState
