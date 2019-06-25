@@ -13,28 +13,17 @@ export type CrudRecord<T> = RecordWithState<T> & {
 export function useCrud<T> (record: IRecord): CrudRecord<T> {
   const crudManager = useContext(CrudContext)
   const [reference, forceRender] = useState({})
-  const CrudRecord = useMemo(() => new Record(record, forceRender) as CrudRecord<T>, [record])
+  const crudRecord = useMemo(() => new Record(record, forceRender) as CrudRecord<T>, [record])
 
   return useMemo(() => {
-    CrudRecord.save = function (options?: Options) {
-      return crudManager.save(CrudRecord._record, options)
+    crudRecord.save = function (options?: Options) {
+      return crudManager.save(crudRecord._record, options)
     }
 
-    CrudRecord.delete = function (options?: Options) {
-      return crudManager.delete(CrudRecord._record, options)
+    crudRecord.delete = function (options?: Options) {
+      return crudManager.delete(crudRecord._record, options)
     }
 
-    const state: any = { ...CrudRecord }
-    const transferState = Object.keys(state).reduce((newState, key) => {
-      newState[key] = {
-        value: typeof state[key] === 'function'
-          ? function (...args: any) { return state[key].call(newState, ...args) }
-          : state[key]
-      }
-
-      return newState
-    }, {} as any)
-
-    return Object.create(CrudRecord, transferState)
-  }, [reference, CrudRecord])
+    return Object.create(crudRecord)
+  }, [reference, crudRecord])
 }

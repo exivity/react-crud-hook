@@ -3032,10 +3032,10 @@ require-main-filename@^2.0.0:
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-2.0.0.tgz#d0b329ecc7cc0f61649f62215be69af54aa8989b"
   integrity sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg==
 
-resma@^0.0.13:
-  version "0.0.13"
-  resolved "https://registry.yarnpkg.com/resma/-/resma-0.0.13.tgz#0aee36957b0e891c543cdfe8d5a2b14040dec371"
-  integrity sha512-RXq2nHC9Qbp0+QMpZVD3Rbuj0HjvyNLZQUoFVPZHN/rXK5QxjEyzoYvC8qpV0ovs0+Rtc+0TRXLOhIBKmXDfHA==
+resma@^0.0.14:
+  version "0.0.14"
+  resolved "https://registry.yarnpkg.com/resma/-/resma-0.0.14.tgz#6a6b36d54354d94866a9504249cae983c0f28f26"
+  integrity sha512-Mo+UNol+CymZsbt3BvJmQmrBqQAc45/7iTQEbfThkRnmiVRE9uBhHNEzxbfkvnmbF964jSp9BJCHon3BboWJQw==
   dependencies:
     immer "^2.1.5"
     typescript "^3.4.3"
