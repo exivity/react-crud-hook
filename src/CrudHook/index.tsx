@@ -24,6 +24,15 @@ export function useCrud<T> (record: IRecord): CrudRecord<T> {
       return crudManager.delete(CrudRecord._record, options)
     }
 
-    return Object.create(CrudRecord)
+    const state: any = { ...CrudRecord }
+    const transferState = Object.keys(state).reduce((newState, key) => {
+      newState[key] = {
+        value: state[key]
+      }
+
+      return newState
+    }, {} as any)
+
+    return Object.create(CrudRecord, transferState)
   }, [reference, CrudRecord])
 }
