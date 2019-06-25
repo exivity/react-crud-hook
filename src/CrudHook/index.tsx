@@ -27,5 +27,5 @@ export function useCrud<T> (record: IRecord): CrudRecord<T> {
     }
 
     return Object.create(CrudRecord)
-  }, [reference, record])
+  }, [reference, CrudRecord])
 }
