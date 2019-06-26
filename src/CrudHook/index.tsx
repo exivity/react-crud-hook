@@ -12,6 +12,7 @@ export type CrudRecord<T> = RecordWithState<T> & {
 
 export function useRecordState (record: IRecord) {
   const { store } = useContext(CrudContext)
+  const [prevRecord, setPrev] = useState(record)
   const [storedRecord, setStoredRecord] = useState(record)
 
   const [id, dispatcher] = useMemo(() => {
@@ -21,9 +22,13 @@ export function useRecordState (record: IRecord) {
   }, [record])
 
   useEffect(() => {
-    setStoredRecord(record)
     return () => store.unSubscribe(id)
   }, [record])
+
+  if (prevRecord !== record) {
+    setStoredRecord(record)
+    setPrev(record)
+  }
 
   return [storedRecord, dispatcher] as [IRecord, any]
 }
