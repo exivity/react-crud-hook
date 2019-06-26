@@ -10,28 +10,39 @@ export type CrudRecord<T> = RecordWithState<T> & {
   delete: (options?: Options) => void
 }
 
-export function useCrud<T> (record: IRecord): CrudRecord<T> {
-  const crudManager = useContext(CrudContext)
-  const [reference, forceRender] = useState(record)
+export function useRecordState (record: IRecord) {
+  const { store } = useContext(CrudContext)
+  const [storedRecord, setStoredRecord] = useState(record)
 
-  const crud = useMemo(() => {
-    forceRender(record)
-    return new Record(record) as CrudRecord<T>
+  const [id, dispatcher] = useMemo(() => {
+    const storeId = store.register(record)
+
+    store.subscribe(storeId, setStoredRecord)
+    return [storeId, store.dispatcher(storeId)]
   }, [record])
 
-  useEffect(() => crud.subscribe(forceRender), [record])
+  useEffect(() => {
+    return () => store.unSubscribe(id)
+  }, [record])
+
+  return [storedRecord, dispatcher] as [IRecord, any]
+}
+
+export function useCrud<T> (record: IRecord): CrudRecord<T> {
+  const { manager } = useContext(CrudContext)
+  const [state, dispatcher] = useRecordState(record)
 
   return useMemo(() => {
-    crud._record = reference
+    const crudRecord = new Record(state, dispatcher) as CrudRecord<T>
 
-    crud.save = function (options?: Options) {
-      return crudManager.save(crud._record, options)
+    crudRecord.save = function (options?: Options) {
+      return manager.save(crudRecord._record, options)
     }
 
-    crud.delete = function (options?: Options) {
-      return crudManager.delete(crud._record, options)
+    crudRecord.delete = function (options?: Options) {
+      return manager.delete(crudRecord._record, options)
     }
 
-    return crud
-  }, [reference, crud])
+    return crudRecord
+  }, [state])
 }

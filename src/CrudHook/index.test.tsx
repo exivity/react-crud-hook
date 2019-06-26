@@ -47,10 +47,10 @@ const manager = new CrudManager({
   }
 })
 
-const Wrapper = ({ children }: any) => <CrudProvider value={manager}>{children}</CrudProvider>
+const Wrapper = ({ children }: any) => <CrudProvider manager={manager}>{children}</CrudProvider>
 
 test('Saving a new record (no id) triggers create callbacks with their arguments', async (done) => {
-  const { result } = renderHook(() => useCrud(fakeRecord), { wrapper: Wrapper })
+  const { result, unmount } = renderHook((init) => useCrud(init), { wrapper: Wrapper, initialProps: fakeRecord })
 
   act(() => {
     result.current.save({
@@ -67,6 +67,8 @@ test('Saving a new record (no id) triggers create callbacks with their arguments
       }
     })
   })
+
+  unmount()
 })
 
 test('Saving a existing record (with id) triggers update callbacks with their arguments', async (done) => {
@@ -75,7 +77,7 @@ test('Saving a existing record (with id) triggers update callbacks with their ar
      ...fakeRecord
   }
 
-  const { result } = renderHook(() => useCrud(fakeRecordWithId), { wrapper: Wrapper })
+  const { result, unmount } = renderHook(() => useCrud(fakeRecordWithId), { wrapper: Wrapper, initialProps: fakeRecord })
 
   act(() => {
     result.current.save({
@@ -92,6 +94,8 @@ test('Saving a existing record (with id) triggers update callbacks with their ar
       }
     })
   })
+
+  unmount()
 })
 
 test('Deleting a record triggers delete callbacks with their arguments', async (done) => {
@@ -100,7 +104,7 @@ test('Deleting a record triggers delete callbacks with their arguments', async (
     ...fakeRecord
   }
 
-  const { result } = renderHook(() => useCrud(fakeRecordWithId), { wrapper: Wrapper })
+  const { result, unmount } = renderHook(() => useCrud(fakeRecordWithId), { wrapper: Wrapper, initialProps: fakeRecord })
 
   act(() => {
     result.current.delete({
@@ -117,6 +121,8 @@ test('Deleting a record triggers delete callbacks with their arguments', async (
       }
     })
   })
+
+  unmount()
 })
 
 test('If save catches, onError is triggered', async (done) => {
@@ -125,7 +131,7 @@ test('If save catches, onError is triggered', async (done) => {
     ...fakeRecord
   }
 
-  const { result } = renderHook(() => useCrud(fakeRecordWithId), { wrapper: Wrapper })
+  const { result, unmount } = renderHook(() => useCrud(fakeRecordWithId), { wrapper: Wrapper, initialProps: fakeRecord })
 
   act(() => {
     result.current.save({
@@ -138,6 +144,8 @@ test('If save catches, onError is triggered', async (done) => {
       }
     })
   })
+
+  unmount()
 })
 
 test('If delete catches, onError is triggered', async (done) => {
@@ -146,7 +154,7 @@ test('If delete catches, onError is triggered', async (done) => {
     ...fakeRecord
   }
 
-  const { result } = renderHook(() => useCrud(fakeRecordWithId), { wrapper: Wrapper })
+  const { result, unmount } = renderHook(() => useCrud(fakeRecordWithId), { wrapper: Wrapper, initialProps: fakeRecord })
 
   act(() => {
     result.current.delete({
@@ -159,10 +167,12 @@ test('If delete catches, onError is triggered', async (done) => {
       }
     })
   })
+
+  unmount()
 })
 
 test('Custom options are passed on to promises as second argument - standard callbacks are not', async (done) => {
-  const { result } = renderHook(() => useCrud(fakeRecord), { wrapper: Wrapper })
+  const { result, unmount } = renderHook((init) => useCrud(init), { wrapper: Wrapper, initialProps: fakeRecord })
 
   act(() => {
     result.current.save({
@@ -179,36 +189,39 @@ test('Custom options are passed on to promises as second argument - standard cal
       }
     })
   })
+
+  unmount()
 })
 
 
 test('Calling setters triggers a rerender', async (done) => {
-  const { result, waitForNextUpdate } = renderHook(() => useCrud(fakeRecord), { wrapper: Wrapper })
+  const { result, waitForNextUpdate, unmount } = renderHook((init) => useCrud(init), { wrapper: Wrapper, initialProps: fakeRecord })
 
   setTimeout(() => act(() => {
     result.current.setAttribute('name', 'Michiel de Vos')
   }), 100)
 
-  // waitForNextUpdate triggers on render
+    // waitForNextUpdate triggers on render
   waitForNextUpdate().then(() => {
     expect(result.current.attributes.name).toBe('Michiel de Vos')
+    unmount()
     done()
   })
 })
 
 test('Calling setters updates Record instance reference', async (done) => {
-  const { result, waitForNextUpdate } = renderHook(() => useCrud(fakeRecord), { wrapper: Wrapper })
-  let initialRef: any = null
+  const { result, waitForNextUpdate, unmount } = renderHook((init) => useCrud(init), { wrapper: Wrapper, initialProps: fakeRecord })
+  let ref = {}
 
   setTimeout(() => act(() => {
-    initialRef = result.current
+    ref = result.current
     result.current.setAttribute('name', 'Michiel de Vos')
   }), 100)
 
   // waitForNextUpdate triggers on render
   waitForNextUpdate().then(() => {
-    expect(initialRef).not.toBe(null)
-    expect(result.current).not.toBe(initialRef)
+    expect(result.current).not.toBe(ref)
+    unmount()
     done()
   })
 })
