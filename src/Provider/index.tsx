@@ -37,6 +37,9 @@ const CrudProvider = ({ manager, store = recordStore, children }: Provider) => {
 }
 
 export {
+  Store,
+  Dispatcher,
+  Reducer,
   CrudManager,
   CrudProvider
 }
