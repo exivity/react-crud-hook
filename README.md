@@ -4,7 +4,7 @@ react-crud-hook
 [React](https://reactjs.org/) hook for CRUD-operations and record state management.
 
 This package attempts to make it easier to perform CRUD-operations while also providing methods to set attributes and relationships on a record. Records should conform to the JSON:API specs - https://jsonapi.org/
-
+The react-crud-hook package is fully typed and optimized to prevent unnecessary renders.
 ---
 
 Installation
@@ -53,7 +53,26 @@ const manager = new CrudManager({
 import { CrudProvider } from 'react-crud-hook'
 
 ReactDOM.render(
-  <CrudProvider value={manager}>
+  <CrudProvider manager={manager}>
+    <App/>
+  </CrudProvider>,
+  rootElement
+)
+```
+
+By default the provider will have a store, where it manages records and subscriptions. However, you can also pass one
+yourself.
+
+```jsx
+import { Store, Reducer, Dispatcher } from 'react-crud-hook'
+
+const store = new Store({
+  dispatcher: new Dispatcher(),
+  reducer: new Reducer()
+})
+
+ReactDOM.render(
+  <CrudProvider manager={manager} store={store}>
     <App/>
   </CrudProvider>,
   rootElement
