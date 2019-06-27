@@ -82,7 +82,7 @@ ReactDOM.render(
 ### `useCrud(record)`
 
 ```jsx
-import useCrud from 'react-crud-hook'
+import { useCrud } from 'react-crud-hook'
 
 const record = {
   type: 'user',
