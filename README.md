@@ -5,7 +5,7 @@ react-crud-hook
 
 This package attempts to make it easier to perform CRUD-operations while also providing methods to set attributes and relationships on a record. Records should conform to the JSON:API specs - https://jsonapi.org/
 The react-crud-hook package is fully typed and optimized to prevent unnecessary renders.
----
+
 
 Installation
 ------------
