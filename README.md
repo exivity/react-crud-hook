@@ -25,7 +25,7 @@ yarn add react-crud-hook
 API
 ---
 
-### `<CrudManager/>`
+### `CrudManager`
 
 ```jsx
 import { CrudManager } from 'react-crud-hook'
@@ -47,32 +47,32 @@ const manager = new CrudManager({
 })
 ```
 
-### `<CrudProvider/>`
+### `Store`
 
 ```jsx
-import { CrudProvider } from 'react-crud-hook'
+import { Store, Dispatcher, Reducer } from 'react-crud-hook'
 
-ReactDOM.render(
-  <CrudProvider manager={manager}>
-    <App/>
-  </CrudProvider>,
-  rootElement
-)
-```
-
-By default the provider will have a store, where it manages records and subscriptions. However, you can also pass one
-yourself.
-
-```jsx
-import { Store, Reducer, Dispatcher } from 'react-crud-hook'
+// The store is not required as it is already provided by default. However if you like to customize how records are
+// updated in the store you can provide your own Dispatcher and/or Reducer. 
 
 const store = new Store({
   dispatcher: new Dispatcher(),
   reducer: new Reducer()
 })
 
+```
+
+### `<CrudProvider/>`
+
+By default the provider will have a store, where it manages records and subscriptions. However, you can also pass one
+yourself.
+
+```jsx
+import { CrudProvider } from 'react-crud-hook'
+
+// Store is not required - it will have one by default
 ReactDOM.render(
-  <CrudProvider manager={manager} store={store}>
+  <CrudProvider manager={manager} store={Store}>
     <App/>
   </CrudProvider>,
   rootElement
@@ -129,6 +129,15 @@ const ReactComponent = () => {
       <button onClick={record.save}> Click </button>
     </div>
   )
+  
+    // Use curried methods
+    return (
+      <div>
+        <input value={record.attributes.name}
+          onChange={record.setAttribute('name')}/>
+        <button onClick={record.save}> Click </button>
+      </div>
+    )
 }
 ```
 
