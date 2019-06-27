@@ -1,5 +1,5 @@
 import { useEffect, useContext, useState, useMemo } from 'react'
-import { Record, IRecord } from 'resma'
+import { Record, IRecord, Dispatcher } from 'resma'
 import { Options } from 'lemon-curd'
 import { CrudContext } from '../Provider'
 
@@ -27,22 +27,22 @@ export function useRecordState (record: IRecord) {
     setPrev(record)
   }
 
-  return [storedRecord, dispatcher] as [IRecord, any]
+  return [storedRecord, dispatcher, id] as [IRecord, ReturnType<Dispatcher['create']>, number]
 }
 
 export function useCrud<T> (record: IRecord): CrudRecord<T> {
-  const { manager } = useContext(CrudContext)
-  const [state, dispatcher] = useRecordState(record)
+  const { manager, store } = useContext(CrudContext)
+  const [state, dispatcher, id] = useRecordState(record)
 
   return useMemo(() => {
     const crudRecord = new Record(state, dispatcher) as CrudRecord<T>
 
     crudRecord.save = function (options?: Options) {
-      return manager.save(crudRecord._record, options)
+      return manager.save(store.getRecord(id), options)
     }
 
     crudRecord.delete = function (options?: Options) {
-      return manager.delete(crudRecord._record, options)
+      return manager.delete(store.getRecord(id), options)
     }
 
     return crudRecord
