@@ -17,13 +17,10 @@ export function useRecordState (record: IRecord) {
 
   const [id, dispatcher] = useMemo(() => {
     const storeId = store.register(record)
-    store.subscribe(storeId, setStoredRecord)
     return [storeId, store.dispatcher(storeId)]
   }, [record])
 
-  useEffect(() => {
-    return () => store.unSubscribe(id)
-  }, [record])
+  useEffect(() => store.subscribe(id, setStoredRecord), [record])
 
   if (prevRecord !== record) {
     setStoredRecord(record)
