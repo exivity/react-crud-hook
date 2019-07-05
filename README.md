@@ -103,6 +103,7 @@ const ReactComponent = () => {
       .addHasMany('employees', { type: 'employee', id: '2' })
       .addHasMany('clients', { type: 'client', id: '7' })
       .addHasOne('CEO', { type: 'CEO', id: '2' })
+      .resetAttributes('age')
       .save({ 
 
         // Use standard callback enriched with extensions to perform side tasks
@@ -151,6 +152,9 @@ All the following methods, except for save and delete, can be curried by providi
 | addHasMany | relationship, RecordIdentifier | Use ```addHasMany``` to add a **hasMany** related record.
 | addHasOne | relationship, RecordIdentifier | Use ```addHasOne``` to add or replace a **hasOne** related record.
 | removeRelationship | relationship, relatedId | Use ```removeRelationship``` to remove a **hasOne** or **hasMany** related record.
+| reset | none | Use ```reset``` to reset all attributes and relationships to its initial value.
+| resetAttributes | string or string[] | Use ```resetAttributes``` to specifically reset attributes only.
+| resetRelationships | string or string[] | Use ```resetRelationships``` to specifically reset relationships only.
 | save | options? | Use ```save``` to persist a record - ```save``` will determine by the presence of an **id** whether to *create* or *update*. Alongside of the standard callbacks you can provide custom options which will be passed to the provider crud-functions as second argument. 
 | delete | options? | Use ```delete``` to delete a record.
 
