@@ -1,9 +1,9 @@
 import { useEffect, useContext, useState, useMemo } from 'react'
-import { Record, IRecord, Dispatcher } from 'resma'
+import { Record, IRecord, DispatcherFactory, CurriedDispatchers } from 'resma'
 import { Options } from 'lemon-curd'
 import { CrudContext } from '../Provider'
 
-type RecordWithState<T> = T & Record
+type RecordWithState<T> = T & Record<CurriedDispatchers>
 
 export type CrudRecord<T> = RecordWithState<T> & {
   save: (options?: Options) => void
@@ -15,9 +15,9 @@ export function useRecordState (record: IRecord) {
   const [prevRecord, setPrev] = useState(record)
   const [storedRecord, setStoredRecord] = useState(record)
 
-  const [id, dispatcher] = useMemo(() => {
+  const [id, dispatcherFactory] = useMemo(() => {
     const storeId = store.register(record)
-    return [storeId, store.dispatcher(storeId)]
+    return [storeId, store.getDispatcherFactory(storeId)]
   }, [record])
 
   useEffect(() => store.subscribe(id, setStoredRecord), [record])
@@ -27,15 +27,15 @@ export function useRecordState (record: IRecord) {
     setPrev(record)
   }
 
-  return [storedRecord, dispatcher, id] as [IRecord, ReturnType<Dispatcher['create']>, number]
+  return [storedRecord, dispatcherFactory, id] as [IRecord, DispatcherFactory<CurriedDispatchers>, number]
 }
 
 export function useCrud<T> (record: IRecord): CrudRecord<T> {
   const { manager, store } = useContext(CrudContext)
-  const [state, dispatcher, id] = useRecordState(record)
+  const [state, dispatcherFactory, id] = useRecordState(record)
 
   return useMemo(() => {
-    const crudRecord = new Record(state, dispatcher) as CrudRecord<T>
+    const crudRecord = new Record(state, dispatcherFactory) as unknown as CrudRecord<T>
 
     crudRecord.save = function (options?: Options) {
       return manager.save(store.getRecord(id), options)
