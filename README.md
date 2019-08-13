@@ -79,7 +79,7 @@ ReactDOM.render(
 )
 ```
 
-### `useCrud(record)`
+### `useCrud(record, options?)`
 
 ```jsx
 import { useCrud } from 'react-crud-hook'
@@ -141,6 +141,14 @@ const ReactComponent = () => {
     )
 }
 ```
+
+### `options?`
+
+| Name | value | Description
+|:---- |:---------- |:-----------
+| unSubscribeDelay | number | When useCrud unmounts it deletes the associated record state from store - you can delay this with this option.
+| onUnSubscribe | (record) => void | This callback will be called when a record unSubscribes from store. Normally this happens when useCrud unmounts unless the unSubscribeDelay option has been given.
+
 
 ### `Methods`
 
