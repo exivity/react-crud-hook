@@ -4,7 +4,7 @@ import { renderHook, act } from 'react-hooks-testing-library'
 import { useCrud } from './index'
 import { CrudProvider } from '../Provider'
 import { CrudManager } from 'lemon-curd'
-import { IRecord } from 'resma'
+import { IRecord, Store, Reducer, Dispatcher } from 'resma'
 
 const fakeRecord = {
   type: 'company',
@@ -47,7 +47,12 @@ const manager = new CrudManager({
   }
 })
 
-const Wrapper = ({ children }: any) => <CrudProvider manager={manager}>{children}</CrudProvider>
+const store = new Store({
+  reducer: new Reducer(),
+  dispatcher: new Dispatcher()
+})
+
+const Wrapper = ({ children }: any) => <CrudProvider manager={manager} store={store}>{children}</CrudProvider>
 
 test('Saving a new record (no id) triggers create callbacks with their arguments', async (done) => {
   const { result, unmount } = renderHook((init) => useCrud(init), { wrapper: Wrapper, initialProps: fakeRecord })
@@ -193,7 +198,6 @@ test('Custom options are passed on to promises as second argument - standard cal
   unmount()
 })
 
-
 test('Calling setters triggers a rerender', async (done) => {
   const { result, waitForNextUpdate, unmount } = renderHook((init) => useCrud(init), { wrapper: Wrapper, initialProps: fakeRecord })
 
@@ -224,4 +228,29 @@ test('Calling setters updates Record instance reference', async (done) => {
     unmount()
     done()
   })
+})
+
+test('unSubscribeDelay prevents store from cleaning up record when unmounting', async (done) => {
+  const store = new Store({
+    reducer: new Reducer(),
+    dispatcher: new Dispatcher()
+  })
+
+  const Wrapper = ({ children }: any) => <CrudProvider manager={manager} store={store}>{children}</CrudProvider>
+
+  const unSubscribeDelay = 1000
+  const onUnSubscribe = (record: any) => {
+    expect(record).toEqual(fakeRecord)
+    expect(Object.keys(store._store).length).toBe(0)
+    done()
+  }
+
+  const options = { unSubscribeDelay, onUnSubscribe }
+  const { result, unmount } = renderHook((init) => useCrud(init, options), { wrapper: Wrapper, initialProps: fakeRecord })
+
+  act(() => {
+    unmount()
+  })
+
+  expect(Object.keys(store._store).length).toBe(1)
 })

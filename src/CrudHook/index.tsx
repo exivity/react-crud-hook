@@ -10,7 +10,15 @@ export type CrudRecord<T> = RecordWithState<T> & {
   delete: (options?: Options) => void
 }
 
-export function useRecordState (record: IRecord) {
+interface UseCrudOptions {
+  unSubscribeDelay?: number
+  onUnSubscribe?: (record: IRecord) => void
+}
+
+export function useRecordState (
+   record: IRecord,
+   { unSubscribeDelay, onUnSubscribe = () => {} }
+ : UseCrudOptions = {}) {
   const { store } = useContext(CrudContext)
   const [prevRecord, setPrev] = useState(record)
   const [storedRecord, setStoredRecord] = useState(record)
@@ -20,7 +28,12 @@ export function useRecordState (record: IRecord) {
     return [storeId, store.getDispatcherFactory(storeId)]
   }, [record])
 
-  useEffect(() => store.subscribe(id, setStoredRecord), [record])
+  useEffect(() => {
+    const unSubscribe = store.subscribe(id, setStoredRecord, unSubscribeDelay)
+    return () => {
+      unSubscribe().then(onUnSubscribe)
+    }
+  }, [record])
 
   if (prevRecord !== record) {
     setStoredRecord(record)
@@ -30,9 +43,9 @@ export function useRecordState (record: IRecord) {
   return [storedRecord, dispatcherFactory, id] as [IRecord, DispatcherFactory<CurriedDispatchers>, number]
 }
 
-export function useCrud<T> (record: IRecord): CrudRecord<T> {
+export function useCrud<T> (record: IRecord, options?: UseCrudOptions): CrudRecord<T> {
   const { manager, store } = useContext(CrudContext)
-  const [state, dispatcherFactory, id] = useRecordState(record)
+  const [state, dispatcherFactory, id] = useRecordState(record, options)
 
   return useMemo(() => {
     const crudRecord = new Record(state, dispatcherFactory) as unknown as CrudRecord<T>
