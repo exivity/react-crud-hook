@@ -120,7 +120,11 @@ const ReactComponent = () => {
           .........
         }
       })
-  }, [])
+  }, [record.id])
+   // State is managed via a functional pattern so you do not have to worry about race conditions etc. 
+   // Make sure to use the id instead of record itself as dependencies for useEffect as the record will have a new reference
+   // after you call a method on it. Also, if you rely on record attributes or relations in your effect, do not forget to put those
+   // in dependencies array.
 
   // Or perform mutations on events
   return (
