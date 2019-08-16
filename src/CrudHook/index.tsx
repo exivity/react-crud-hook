@@ -61,7 +61,3 @@ export function useCrud<T> (record: IRecord, options?: UseCrudOptions): CrudReco
     return crudRecord
   }, [state])
 }
-
-const record = useCrud({ type: 'michiel', id: '10', attributes: {}})
-
-record.setAttribute('michie', '213').save({})
