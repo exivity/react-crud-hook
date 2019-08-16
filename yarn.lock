@@ -350,10 +350,12 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.0.tgz#4c48fed958d6dcf9487195a0ef6456d5f6e0163a"
   integrity sha512-eItQyV43bj4rR3JPV0Skpl1SncRCdziTEK9/v8VwXmV6d/qOUO8/EuWeHBbCZcsfSHfzI5UyMJLCSXtxxznyZg==
 
-"@types/ramda@^0.26.15":
-  version "0.26.15"
-  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.26.15.tgz#217d9d2133f55040bd5db0e67dbbf6ec8509446f"
-  integrity sha512-kmIO8GVOLv0A8UxFr5lJaqp4g8jbXNhH0grBaPL6NgkOqSirRKpV9+5DTmIDXTyq2G18YMdxDhnScEZtY4brtQ==
+"@types/ramda@^0.26.19":
+  version "0.26.19"
+  resolved "https://registry.yarnpkg.com/@types/ramda/-/ramda-0.26.19.tgz#400580597566c016e9743f17c1c48bf4671cda81"
+  integrity sha512-lJuMZDXqZ8W2hl0Gz+wEPUhXcf/tZRuaO5vrxFD3Dv2XMqgTZVw+bvfS6iQAsio9XQV+uhkggtT4eLhDmUpI5g==
+  dependencies:
+    ts-toolbelt "^3.2.22"
 
 "@types/react-dom@^16.8.4":
   version "16.8.4"
@@ -3042,10 +3044,17 @@ require-main-filename@^2.0.0:
   resolved "https://registry.yarnpkg.com/require-main-filename/-/require-main-filename-2.0.0.tgz#d0b329ecc7cc0f61649f62215be69af54aa8989b"
   integrity sha512-NKN5kMDylKuldxYLSUfrbo5Tuzh4hd+2E8NPPX02mZtn1VuREQToYe/ZdlJy+J3uCpfaiGF05e7B8W0iXbQHmg==
 
+<<<<<<< HEAD
 resma@^0.0.41:
   version "0.0.41"
   resolved "https://registry.yarnpkg.com/resma/-/resma-0.0.41.tgz#e208026775b84742a95e6e1fad06d12f5eb39e83"
   integrity sha512-8LifOO8wHi9bQ/cHTyNcC3DFQhlt7T0juFfOQNA34i7yQ1CdcCjS5svuQyF2S30403azeL6fTqSLWoia5blowA==
+=======
+resma@^0.0.34:
+  version "0.0.34"
+  resolved "https://registry.yarnpkg.com/resma/-/resma-0.0.34.tgz#804d36eec12a7aeba28eb4a0abf7b304cf088378"
+  integrity sha512-urbXMmnM6zJ9HpBOMfIA3kvTn3dsaugC0wfiNyB9j5EcCdgHXZ/ZDiId7ulAVMKh/nvKR7rYGX9DvBWvl2010w==
+>>>>>>> ba3985ffecfde0954692a559a8d5e03d18aeb547
   dependencies:
     immer "^3.2.0"
     ramda "^0.26.1"
@@ -3536,6 +3545,11 @@ ts-jest@^24.0.2:
     semver "^5.5"
     yargs-parser "10.x"
 
+ts-toolbelt@^3.2.22:
+  version "3.8.0"
+  resolved "https://registry.yarnpkg.com/ts-toolbelt/-/ts-toolbelt-3.8.0.tgz#bda726025341a5677d49be04fac536d82dfaaf61"
+  integrity sha512-Gjlx1VZR91Ll7FWT0vnJawC/RH6e4Uj7w6605QaIwC7djhkpR765ju1V+pZiejwjf3JFOzMJi78pZ0mfOzVjMg==
+
 tunnel-agent@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/tunnel-agent/-/tunnel-agent-0.6.0.tgz#27a5dea06b36b04a0a9966774b290868f0fc40fd"
@@ -3555,10 +3569,10 @@ type-check@~0.3.2:
   dependencies:
     prelude-ls "~1.1.2"
 
-typescript@^3.4.3:
-  version "3.4.3"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.4.3.tgz#0eb320e4ace9b10eadf5bc6103286b0f8b7c224f"
-  integrity sha512-FFgHdPt4T/duxx6Ndf7hwgMZZjZpB+U0nMNGVCYPq0rEzWKjEDobm4J6yb3CS7naZ0yURFqdw9Gwc7UOh/P9oQ==
+typescript@^3.5.3:
+  version "3.5.3"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-3.5.3.tgz#c830f657f93f1ea846819e929092f5fe5983e977"
+  integrity sha512-ACzBtm/PhXBDId6a6sDJfroT2pOWt/oOnk4/dElG5G33ZL776N3Y6/6bKZJBFpd+b05F3Ct9qDjMeJmRWtE2/g==
 
 uglify-js@^3.1.4:
   version "3.5.7"
