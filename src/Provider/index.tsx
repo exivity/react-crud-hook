@@ -22,7 +22,7 @@ export const CrudContext = createContext<{
 
 export interface Provider {
   manager: CrudManager
-  store?: Store
+  store?:  Store
   children: any
 }
 

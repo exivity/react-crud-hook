@@ -48,7 +48,7 @@ export function useCrud<T> (record: IRecord, options?: UseCrudOptions): CrudReco
   const [state, dispatcherFactory, id] = useRecordState(record, options)
 
   return useMemo(() => {
-    const crudRecord = new Record(state, dispatcherFactory) as unknown as CrudRecord<T>
+    const crudRecord = new Record<CurriedDispatchers>(state, dispatcherFactory) as CrudRecord<T>
 
     crudRecord.save = function (options?: Options) {
       return manager.save(store.getRecord(id), options)
